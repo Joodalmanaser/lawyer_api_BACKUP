@@ -1,6 +1,6 @@
 const Billing = require('../models/Billing');
 
-// إنشاء فاتورة جديدة
+
 exports.createInvoice = async (req, res) => {
   try {
     const invoice = await Billing.create(req.body);
@@ -10,7 +10,6 @@ exports.createInvoice = async (req, res) => {
   }
 };
 
-// عرض كل الفواتير
 exports.getInvoices = async (req, res) => {
   try {
     const invoices = await Billing.find().populate('client case');
@@ -20,7 +19,6 @@ exports.getInvoices = async (req, res) => {
   }
 };
 
-// عرض فاتورة واحدة
 exports.getInvoiceById = async (req, res) => {
   try {
     const invoice = await Billing.findById(req.params.id).populate('client case');
@@ -31,7 +29,6 @@ exports.getInvoiceById = async (req, res) => {
   }
 };
 
-// وضع الفاتورة كمدفوعة
 exports.markAsPaid = async (req, res) => {
   try {
     const invoice = await Billing.findByIdAndUpdate(req.params.id, { paid: true }, { new: true });
@@ -42,7 +39,6 @@ exports.markAsPaid = async (req, res) => {
   }
 };
 
-// حذف الفاتورة
 exports.deleteInvoice = async (req, res) => {
   try {
     const invoice = await Billing.findByIdAndDelete(req.params.id);
