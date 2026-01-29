@@ -1,6 +1,5 @@
 const Case = require('../models/Case');
 
-// إنشاء قضية جديدة
 exports.createCase = async (req, res) => {
   try {
     const newCase = await Case.create(req.body);
@@ -10,7 +9,6 @@ exports.createCase = async (req, res) => {
   }
 };
 
-// عرض كل القضايا
 exports.getCases = async (req, res) => { 
   try {
     const cases = await Case.find().populate('client');
@@ -20,7 +18,6 @@ exports.getCases = async (req, res) => {
   }
 };
 
-// عرض قضية واحدة
 exports.getCaseById = async (req, res) => {
   try {
     const singleCase = await Case.findById(req.params.id).populate('client');
@@ -31,7 +28,6 @@ exports.getCaseById = async (req, res) => {
   }
 };
 
-// تعديل قضية
 exports.updateCase = async (req, res) => {
   try {
     const updatedCase = await Case.findByIdAndUpdate(req.params.id, req.body, { new: true });
@@ -42,7 +38,6 @@ exports.updateCase = async (req, res) => {
   }
 };
 
-// حذف قضية
 exports.deleteCase = async (req, res) => {
   try {
     const deletedCase = await Case.findByIdAndDelete(req.params.id);
