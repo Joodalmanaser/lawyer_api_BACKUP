@@ -11,7 +11,14 @@ const hearingSchema = new mongoose.Schema({
     required: true
   },
   notes: String,
-  result: String
+  result: String,
+
+  assignedLawyer: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true
+  }
+
 }, { timestamps: true });
 
 module.exports = mongoose.model('Hearing', hearingSchema);

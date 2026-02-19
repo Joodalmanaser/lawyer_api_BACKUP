@@ -20,7 +20,9 @@ const userSchema = new mongoose.Schema({
     type: String,
     enum: ['admin', 'lawyer', 'staff'],
     default: 'lawyer'
-  }
+  },
+  // هاي أضفناها لتخزين جميع القضايا الخاصة بالمستخدم
+  cases: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Case' }]
 }, { timestamps: true });
 
 module.exports = mongoose.model('User', userSchema);

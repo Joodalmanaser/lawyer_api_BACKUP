@@ -1,10 +1,7 @@
 const mongoose = require('mongoose');
 
 const caseSchema = new mongoose.Schema({
-  title: {
-    type: String,
-    required: true
-  },
+  title: { type: String, required: true },
   description: String,
   status: {
     type: String,
@@ -13,12 +10,14 @@ const caseSchema = new mongoose.Schema({
   },
   client: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Client',
+    ref: 'Client', 
     required: true
   },
-  assignedLawyer: {
+  // 💡 غيرنا 'user' إلى 'assignedLawyer' ليطابق الـ Controller والتطبيق
+  assignedLawyer: { 
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'User'
+    ref: 'User', 
+    required: true
   }
 }, { timestamps: true });
 

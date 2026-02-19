@@ -20,7 +20,12 @@ const billingSchema = new mongoose.Schema({
     default: false
   },
   description: String,
-  dueDate: Date
+  dueDate: Date,
+  user: { // توحيد المسمى ليكون 'user' بدلاً من 'assignedLawyer'
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true
+  }
 }, { timestamps: true });
 
 module.exports = mongoose.model('Billing', billingSchema);

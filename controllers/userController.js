@@ -2,7 +2,7 @@ const User = require('../models/User');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
-// تسجيل مستخدم جديد
+// 1. تسجيل مستخدم جديد
 exports.register = async (req, res) => {
   try {
     const { name, email, password } = req.body;
@@ -18,7 +18,7 @@ exports.register = async (req, res) => {
   }
 };
 
-// تسجيل الدخول
+// 2. تسجيل الدخول
 exports.login = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -28,6 +28,7 @@ exports.login = async (req, res) => {
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) return res.status(400).json({ message: 'Invalid credentials' });
 
+    // تأكد أن المفتاح JWT_SECRET موجود في ملف .env
     const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '1d' });
 
     res.json({
@@ -40,10 +41,14 @@ exports.login = async (req, res) => {
   }
 };
 
-// عرض بروفايل المستخدم
+// 3. عرض بروفايل المستخدم مع القضايا
 exports.getProfile = async (req, res) => {
   try {
-    const user = await User.findById(req.user.userId).select('-password');
+    // نستخدم req.user.userId (حسب ما تم تعريفه في Auth Middleware)
+    const user = await User.findById(req.user.userId)
+      .select('-password')
+      .populate('cases'); 
+
     if (!user) return res.status(404).json({ message: 'User not found' });
     res.json(user);
   } catch (error) {
@@ -51,12 +56,11 @@ exports.getProfile = async (req, res) => {
   }
 };
 
-// ✅ الوظيفة الجديدة: تحديث بروفايل المستخدم
+// 4. تحديث بروفايل المستخدم
 exports.updateProfile = async (req, res) => {
   try {
     const { name, email, phone } = req.body;
 
-    // تحديث البيانات بناءً على الـ userId المستخرج من الـ Token
     const updatedUser = await User.findByIdAndUpdate(
       req.user.userId, 
       { name, email, phone }, 

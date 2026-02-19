@@ -1,20 +1,33 @@
 const jwt = require('jsonwebtoken');
 
 const auth = (req, res, next) => {
-  const authHeader = req.headers.authorization;
-
-  if (!authHeader || !authHeader.startsWith('Bearer ')) {
-    return res.status(401).json({ message: 'No token provided, authorization denied' });
+  // التأكد من وجود الهيدر والتوكن
+  if (!req.headers?.authorization?.startsWith('Bearer ')) {
+    return res.status(401).json({ 
+      message: 'No token provided, authorization denied' 
+    });
   }
 
-  const token = authHeader.split(' ')[1];
+  const token = req.headers.authorization.split(' ')[1];
 
   try {
+    // فك تشفير التوكن
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = decoded; // نضيف الـ user info لكل request
-    next(); // نمشي للـ controller
+
+    // التعديل الجوهري هنا:
+    // التوكن الخاص بك يحتوي على "userId" وليس "id"
+    req.user = {
+      id: decoded.userId || decoded.id
+    };
+
+    console.log("✅ Auth Middleware: User ID extracted:", req.user.id);
+    next();
+
   } catch (error) {
-    return res.status(401).json({ message: 'Token is not valid' });
+    console.error("❌ Auth Middleware Error:", error.message);
+    return res.status(401).json({ 
+      message: 'Token is not valid' 
+    });
   }
 };
 
